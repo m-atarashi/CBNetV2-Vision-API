@@ -25,7 +25,7 @@ def demo(img, model, score_thr=0.3):
 def main():
     model_index = 1
     # init a detector
-    model = init_detector(configs[model_index], checkpoins[model_index], device=device)
+    model = init_detector(configs[model_index], checkpoints[model_index], device=device)
     
     imgs = sorted(glob('demo/input_frames/*.png'))
     for img in imgs:
