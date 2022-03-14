@@ -3,13 +3,13 @@ from os.path import basename, splitext
 from glob import glob
 
 
-config_files = [
-    'configs/swin/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco.py',
-    'configs/swin/cascade_mask_rcnn_swin_small_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco.py'
+configs = [
+    'configs/cbnet/htc_cbv2_swin_base_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_20e_coco.py',
+    'configs/cbnet/htc_cbv2_swin_large_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_1x_coco.py'
 ]
-checkpoint_files = [
-    'checkpoints/mask_rcnn_swin_small_patch4_window7.pth',
-    'checkpoints/cascade_mask_rcnn_swin_small_patch4_window7.pth'
+checkpoints = [
+    'checkpoints/htc_cbv2_swin_base22k_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_20e_coco.pth',
+    'checkpoints/htc_cbv2_swin_large22k_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_1x_coco.pth'
 ]
 
 device = 'cuda:0'
