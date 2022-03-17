@@ -3,7 +3,7 @@ import enum
 import numpy as np
 from ast import parse
 from os import makedirs
-from os.path import basename, splitext
+from os.path import basename, splitext, isdir
 from PIL import Image
 
 from mmdet.apis import inference_detector, init_detector, show_result_pyplot
@@ -22,8 +22,14 @@ checkpoints = [
 device = 'cuda:0'
 
 
-def save_masked_image(img_path, result, score_thr=0.3):
-    makedirs(f'{CBNetV2_HOME}data/outputs/dst_{splitext(basename(img_path))[0]}', exist_ok=True)
+def save_masked_image(img_path, result, score_thr=0.3, output_dir=f'{CBNetV2_HOME}/data/outputs/'):
+    # if it helps
+    if not isdir(output_dir):
+        makedirs(output_dir)
+    if output_dir[-1] != '/':
+        output_dir += '/'
+    makedirs(f'{output_dir}dst_{splitext(basename(img_path))[0]}', exist_ok=True)
+
     img = np.array(Image.open(img_path))
 
     for class_index, mask_by_class in enumerate(result[1]):
@@ -47,11 +53,16 @@ def save_masked_image(img_path, result, score_thr=0.3):
             if 0 in dst.shape:
                 continue
             
-            dst_path = f'{CBNetV2_HOME}data/outputs/dst_{splitext(basename(img_path))[0]}/{splitext(basename(img_path))[0]}_class{str(class_index).zfill(2)}_{str(instance_index).zfill(3)}.jpg'
+            dst_path = f'{output_dir}dst_{splitext(basename(img_path))[0]}/{splitext(basename(img_path))[0]}_class{str(class_index).zfill(2)}_{str(instance_index).zfill(3)}.jpg'
             Image.fromarray(dst.astype(np.uint8)).save(dst_path)
 
 
-def demo(img_path, config_file, checkpoint_file, score_thr=0.3):
+def demo(img_path, config_file, checkpoint_file, score_thr=0.3, output_dir=f'{CBNetV2_HOME}/data/outputs/'):
+    # if it helps
+    if not isdir(output_dir):
+        makedirs(output_dir)
+    if output_dir[-1] != '/':
+        output_dir += '/'
     # init a detector
     model = init_detector(config_file, checkpoint_file, device=device)
     # inference the demo image
@@ -59,7 +70,7 @@ def demo(img_path, config_file, checkpoint_file, score_thr=0.3):
     # show the result image
     show_result_pyplot(model, img_path, result, score_thr=score_thr)
     # save the result image
-    output = f'{CBNetV2_HOME}data/outputs/{splitext(basename(img_path))[0]}_output.jpg'
+    output = f'{output_dir}{splitext(basename(img_path))[0]}_output.jpg'
     model.show_result(img_path, result, score_thr=score_thr, out_file=output)
 
     return result
@@ -69,6 +80,7 @@ def parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--checkpoint_index", type=int, help="index of checkpoint")
     parser.add_argument("-i", "--img_path", type=str, help="path of an image which the model inference")
+    parser.add_argument("-o", "--output_dir", type=str, help="path of an output directory which stores results")
     parser.add_argument("-i_origin", "--original_img_path", type=str, help="path of the original image with overlapping bounding box.The scale ratio must be equal to the input image.")
     parser.add_argument("--score_thr", type=float, default=0.3, help="threshold socre to determines the bounding boxes to be displayed (defalt is 0.3)")
     parser.add_argument("-l", "--list", action="store_true", help="list information about available checkpoints")
@@ -98,10 +110,11 @@ def main():
     checkpoint_index  = args.checkpoint_index
     img_path          = args.img_path
     original_img_path = args.original_img_path if args.original_img_path else args.img_path
+    output_dir        = args.output_dir
     score_thr         = args.score_thr
 
-    result = demo(img_path, configs[checkpoint_index], checkpoints[checkpoint_index], score_thr)
-    save_masked_image(original_img_path, result, score_thr)
+    result = demo(img_path, configs[checkpoint_index], checkpoints[checkpoint_index], score_thr, output_dir)
+    save_masked_image(original_img_path, result, score_thr, output_dir)
 
 
 if __name__ == "__main__":
