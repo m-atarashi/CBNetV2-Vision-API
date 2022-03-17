@@ -22,7 +22,7 @@ device = 'cuda:0'
 
 
 def save_masked_image(img_path, result, score_thr=0.3):
-    makedirs(f'demo/dst_{splitext(basename(img_path))[0]}', exist_ok=True)
+    makedirs(f'data/outputs/dst_{splitext(basename(img_path))[0]}', exist_ok=True)
     img = np.array(Image.open(img_path))
 
     for class_index, mask_by_class in enumerate(result[1]):
@@ -46,7 +46,7 @@ def save_masked_image(img_path, result, score_thr=0.3):
             if 0 in dst.shape:
                 continue
             
-            dst_path = f'demo/dst_{splitext(basename(img_path))[0]}/{splitext(basename(img_path))[0]}_class{str(class_index).zfill(2)}_{str(instance_index).zfill(3)}.jpg'
+            dst_path = f'data/outputs/dst_{splitext(basename(img_path))[0]}/{splitext(basename(img_path))[0]}_class{str(class_index).zfill(2)}_{str(instance_index).zfill(3)}.jpg'
             Image.fromarray(dst.astype(np.uint8)).save(dst_path)
 
 
@@ -58,7 +58,7 @@ def demo(img_path, config_file, checkpoint_file, score_thr=0.3):
     # show the result image
     show_result_pyplot(model, img_path, result, score_thr=score_thr)
     # save the result image
-    output = f'demo/{splitext(basename(img_path))[0]}_output.jpg'
+    output = f'data/outputs/{splitext(basename(img_path))[0]}_output.jpg'
     model.show_result(img_path, result, score_thr=score_thr, out_file=output)
 
     return result
