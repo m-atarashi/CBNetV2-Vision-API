@@ -8,21 +8,22 @@ from PIL import Image
 
 from mmdet.apis import inference_detector, init_detector, show_result_pyplot
 
+CBNetV2_HOME = '/home/m-atarashi/CBNetV2/'
 
 configs = [
-    'configs/cbnet/htc_cbv2_swin_base_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_20e_coco.py',
-    'configs/cbnet/htc_cbv2_swin_large_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_1x_coco.py'
+    f'${CBNetV2_HOME}configs/cbnet/htc_cbv2_swin_base_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_20e_coco.py',
+    f'${CBNetV2_HOME}configs/cbnet/htc_cbv2_swin_large_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_1x_coco.py'
 ]
 checkpoints = [
-    'checkpoints/htc_cbv2_swin_base22k_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_20e_coco.pth',
-    'checkpoints/htc_cbv2_swin_large22k_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_1x_coco.pth'
+    f'${CBNetV2_HOME}checkpoints/htc_cbv2_swin_base22k_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_20e_coco.pth',
+    f'${CBNetV2_HOME}checkpoints/htc_cbv2_swin_large22k_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_1x_coco.pth'
 ]
 
 device = 'cuda:0'
 
 
 def save_masked_image(img_path, result, score_thr=0.3):
-    makedirs(f'data/outputs/dst_{splitext(basename(img_path))[0]}', exist_ok=True)
+    makedirs(f'${CBNetV2_HOME}data/outputs/dst_{splitext(basename(img_path))[0]}', exist_ok=True)
     img = np.array(Image.open(img_path))
 
     for class_index, mask_by_class in enumerate(result[1]):
@@ -46,7 +47,7 @@ def save_masked_image(img_path, result, score_thr=0.3):
             if 0 in dst.shape:
                 continue
             
-            dst_path = f'data/outputs/dst_{splitext(basename(img_path))[0]}/{splitext(basename(img_path))[0]}_class{str(class_index).zfill(2)}_{str(instance_index).zfill(3)}.jpg'
+            dst_path = f'${CBNetV2_HOME}data/outputs/dst_{splitext(basename(img_path))[0]}/{splitext(basename(img_path))[0]}_class{str(class_index).zfill(2)}_{str(instance_index).zfill(3)}.jpg'
             Image.fromarray(dst.astype(np.uint8)).save(dst_path)
 
 
@@ -58,7 +59,7 @@ def demo(img_path, config_file, checkpoint_file, score_thr=0.3):
     # show the result image
     show_result_pyplot(model, img_path, result, score_thr=score_thr)
     # save the result image
-    output = f'data/outputs/{splitext(basename(img_path))[0]}_output.jpg'
+    output = f'${CBNetV2_HOME}data/outputs/{splitext(basename(img_path))[0]}_output.jpg'
     model.show_result(img_path, result, score_thr=score_thr, out_file=output)
 
     return result
