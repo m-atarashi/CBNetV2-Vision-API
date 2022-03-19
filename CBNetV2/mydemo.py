@@ -1,7 +1,5 @@
 import argparse
-import enum
 import numpy as np
-from ast import parse
 from os import makedirs
 from os.path import basename, splitext, isdir
 from PIL import Image
