@@ -1,29 +1,23 @@
 import ffmpeg
 import numpy as np
-import matplotlib.pyplot as plt
 from PIL import Image
 
-path = '../demo_data/inputs/shelving_short.mp4'
+input_path = '../demo_data/inputs/shelving_short.mp4'
 
-height = ffmpeg.probe(path)['streams'][0]['height']
-width = ffmpeg.probe(path)['streams'][0]['width']
+height = ffmpeg.probe(input_path)['streams'][0]['height']
+width = ffmpeg.probe(input_path)['streams'][0]['width']
 
 
-out, _ = (
+output = (
     ffmpeg
-    .input(path)
+    .input(input_path)
     .output('pipe:', format='rawvideo', pix_fmt='rgb24')
     .run(capture_stdout=True)
 )
 
-arr = (
-    np
-    .frombuffer(out, np.uint8)
-    .reshape([-1, height, width, 3])
-)
+frames = np.frombuffer(output, np.uint8).reshape([-1, height, width, 3])
 
-
-print(arr.shape)
-Image.fromarray(arr[1]).save('../demo_data/outputs/test2_1.jpg')
-Image.fromarray(arr[300]).save('../demo_data/outputs/test2_2.jpg')
-Image.fromarray(arr[600]).save('../demo_data/outputs/test2_3.jpg')
+print(frames.shape)
+Image.fromarray(frames[100]).save('../demo_data/outputs/test2_1.jpg')
+Image.fromarray(frames[200]).save('../demo_data/outputs/test2_2.jpg')
+Image.fromarray(frames[300]).save('../demo_data/outputs/test2_3.jpg')
