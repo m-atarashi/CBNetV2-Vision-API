@@ -1,6 +1,7 @@
 from mmdet.apis import init_detector, inference_detector, show_result_pyplot
 from os.path import basename, splitext
 from glob import glob
+import ffmpeg
 
 
 configs = [
