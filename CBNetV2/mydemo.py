@@ -8,7 +8,7 @@ from PIL import Image
 
 from mmdet.apis import inference_detector, init_detector, show_result_pyplot
 
-CBNetV2_HOME = '/home/m-atarashi/CBNetV2/'
+CBNetV2_HOME = '/home/m-atarashi/CBNetV2/CBNetV2/'
 
 configs = [
     f'{CBNetV2_HOME}configs/cbnet/htc_cbv2_swin_base_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_20e_coco.py',
