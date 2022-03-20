@@ -30,7 +30,8 @@ def main():
     all_frames = extract_frames(video_path)
     model = mydemo_batch.load_model()
 
-    step_size = 4
+    # over step_size 2 causes CUDA out of memory lol
+    step_size = 2
     for slice_start in range(0, len(all_frames), step_size):
         frames = all_frames[slice_start : slice_start + step_size]
         results = mydemo_batch.inference(frames, model)

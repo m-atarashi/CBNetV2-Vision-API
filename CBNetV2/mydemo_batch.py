@@ -59,5 +59,5 @@ def save_masked_image(image, result, score_thr=0.3, output_dir='../data/outputs/
             if 0 in dst.shape:
                 continue
             
-            dst_path = f'{output_dir}/{COCO_classes[class_index]}_{str(instance_index).zfill(3)}.jpg'
+            dst_path = f'{output_dir}/{COCO_classes[class_index]}_{str(instance_index).zfill(4)}.jpg'
             Image.fromarray(dst.astype(np.uint8)).save(dst_path)
