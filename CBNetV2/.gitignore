@@ -119,8 +119,3 @@ work_dirs/
 *.pth
 *.py~
 *.sh~
-
-demo/20210712_iPhone.mp4
-demo/input_frames*
-demo/output_frames*
-*.mp4

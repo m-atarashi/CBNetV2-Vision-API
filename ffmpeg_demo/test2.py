@@ -7,7 +7,7 @@ from CBNetV2 import mydemo, mydemo_batch
 
 
 video_path = '../data/inputs/shelving_short.mp4'
-output_root = '../data/outpus'
+output_root = '../data/outputs'
 
 
 def extract_frames(video_path):
@@ -33,7 +33,7 @@ def main():
         frames = all_frames[slice_start : min(slice_start + step_size, len(all_frames))]
         results = mydemo_batch.inference(frames)
         for i in range(len(frames)):
-            output_dir = f'{output_root}/{basename(video_path)}/frame_{str(i).zfill(8)}/'
+            output_dir = f'{output_root}/{basename(video_path)}/frame_{str(slice_start+i).zfill(8)}/'
             makedirs(output_dir)
             mydemo_batch.save_masked_image(frames[i], results[i], score_thr=0.3, output_dir=output_dir)
 
