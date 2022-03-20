@@ -29,7 +29,7 @@ def extract_frames(video_path):
     )
 
     frames = np.frombuffer(output, np.uint8).reshape([-1, height_px, width_px, 3])
-    return frames
+    return [frame for frame in frames]
 
 
 def main():
@@ -55,13 +55,18 @@ def main_alter():
     step = inference_batch_size
     for slice_start in range(0, len(all_frames), step):
         batch_frames = all_frames[slice_start : slice_start + step]
+        
+        batch_bboxes, batch_masks = mydemo_batch_alter.inference(batch_frames, model)
+        batch_masks = np.array(batch_masks, dtype=np.uint8))
+        batch_masks = batch_masks.reshape(*batch_masks.shape, 1)
+        batch_coords = batch_bboxes.astype(np.uint16)[:][:4]
+        batch_scores = batch_bboxes[:][4]
 
-        batch_coords, batch_masks = mydemo_batch_alter.inference(batch_frames, model)
         for i in range(step):
             output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i + slice_start).zfill(8)}/'
             makedirs(output_dir, exist_ok=True)
 
-            mydemo_batch_alter.save_instances(batch_frames[i], batch_coords[i], batch_masks[i], output_dir=output_dir)
+            mydemo_batch_alter.save_instances(batch_frames[i], batch_coords[i], batch_scores[i], batch_masks[i], output_dir=output_dir)
 
 
 if __name__ == '__main__':

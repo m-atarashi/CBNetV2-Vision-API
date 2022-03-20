@@ -27,28 +27,26 @@ def load_model(config_file=configs[1], checkpoint_file=checkpoints[1], device=de
     return model
 
 
-def inference(images, model, score_thr=0.3):
+def inference(images, model):
     # inference images batch
     results = inference_detector(model, images)
-    return results[:][0][sepc_class_index], results[:][1][sepc_class_index]
+    results = np.array(results)
+    return results[:, 0, sepc_class_index], results[:, 1, sepc_class_index]
 
 
-def save_instances(image, coords, masks, score_thr=0.3, output_dir=f'{CBNetV2_HOME}../outputs/'):
-    for i in range(len(coords)):
-        # threshold check. coord[4] is the probabilty score
-        if coords[4] <= score_thr:
+def save_instances(image, coords, score, masks, score_thr=0.3, output_dir=f'{CBNetV2_HOME}../outputs/'):
+    num_instances = len(coords)
+    for i in range(num_instances):
+        # threshold check. coords[i][4] is the probabilty score
+        if coords[i][4] <= score_thr:
             continue
             
-        # convert bool to uint8 and reshape from 2D to 3D
-        masks = masks.astype(np.uint8).reshape(*masks.shape, 1)
-        masked_instance = image * masks
-
-        # coord[:4] is BBox coordinate
-        coords = coords.astype(np.uint16)[:4]
-        cropped_instance = masked_instance[coords[1]:coords[3], coords[0]:coords[2]]
+        masked_instance  = image * mask[i]
+        cropped_instance = masked_instance[coords[i][1]:coords[i][3], coords[i][0]:coords[i][2]]
 
         # error handing for "ValueError: tile cannot extend outside image"
         if 0 in cropped_instance.shape:
             continue
-        output_path = f'{output_dir}book_{str(i).zfill(4)}.jpg'
-        Image.fromarray(cropped_instance.astype(np.uint8)).save(dst_path)
+
+        output_path = f'{output_dir}{COCO_classes[sepc_class_index]}_{str(i).zfill(4)}.jpg'
+        Image.fromarray(cropped_instance.astype(np.uint8)).save(output_path)
