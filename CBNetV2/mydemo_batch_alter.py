@@ -34,7 +34,7 @@ def inference(images, model, score_thr=0.3):
 
 
 def save_instances(image, coords, masks, score_thr=0.3, output_dir):
-    for i in range(len(coords))]
+    for i in range(len(coords)):
         # threshold check. coord[4] is the probabilty score
         if coords[4] <= score_thr:
             continue
