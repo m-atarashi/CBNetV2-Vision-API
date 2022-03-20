@@ -33,7 +33,7 @@ def inference(images, model, score_thr=0.3):
     return results[:][0][sepc_class_index], results[:][1][sepc_class_index]
 
 
-def save_instances(image, coords, masks, score_thr=0.3, output_dir):
+def save_instances(image, coords, masks, score_thr=0.3, output_dir=f'{CBNetV2_HOME}../outputs/'):
     for i in range(len(coords)):
         # threshold check. coord[4] is the probabilty score
         if coords[4] <= score_thr:
@@ -50,5 +50,5 @@ def save_instances(image, coords, masks, score_thr=0.3, output_dir):
         # error handing for "ValueError: tile cannot extend outside image"
         if 0 in cropped_instance.shape:
             continue
-        output_path = f'{output_dir}/book_{str(i).zfill(4)}.jpg'
+        output_path = f'{output_dir}book_{str(i).zfill(4)}.jpg'
         Image.fromarray(cropped_instance.astype(np.uint8)).save(dst_path)
