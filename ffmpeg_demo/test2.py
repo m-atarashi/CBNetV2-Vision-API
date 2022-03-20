@@ -1,15 +1,19 @@
+from os import makedirs
+from os.path import basename, splitext
+
 import ffmpeg
 import numpy as np
-from os import makedirs
-from os.path import basename
 from PIL import Image
+from numba import jit
+
 from CBNetV2 import mydemo, mydemo_batch
 
 
-video_path = '../data/inputs/shelving_short.mp4'
+video_path = '../data/inputs/shelving_short_02.mp4'
 output_root = '../data/outputs'
 
 
+@jit
 def extract_frames(video_path):
     height_px = ffmpeg.probe(video_path)['streams'][0]['height']
     width_px  = ffmpeg.probe(video_path)['streams'][0]['width']
@@ -26,6 +30,7 @@ def extract_frames(video_path):
     return frames
 
 
+@jit
 def main():
     all_frames = extract_frames(video_path)
     model = mydemo_batch.load_model()
@@ -37,7 +42,7 @@ def main():
         results = mydemo_batch.inference(frames, model)
 
         for i in range(len(results)):
-            output_dir = f'{output_root}/{basename(video_path)}/frame_{str(i + slice_start).zfill(8)}/'
+            output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i + slice_start).zfill(8)}/'
             makedirs(output_dir)
             
             mydemo_batch.save_masked_image(frames[i], results[i], score_thr=0.3, output_dir=output_dir)
