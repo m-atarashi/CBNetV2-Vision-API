@@ -1,6 +1,7 @@
 import ffmpeg
 import numpy as np
-from os import mkdir, path.basename
+from os import mkdir
+from os.path import basename
 from PIL import Image
 from CBNetV2 import mydemo, mydemo_batch
 
