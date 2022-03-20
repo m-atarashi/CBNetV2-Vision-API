@@ -1,6 +1,6 @@
 import ffmpeg
 import numpy as np
-from os import mkdir
+from os import mkdirs
 from os.path import basename
 from PIL import Image
 from CBNetV2 import mydemo, mydemo_batch
@@ -34,7 +34,7 @@ def main():
         results = mydemo_batch.inference(frames)
         for i in range(len(frames)):
             output_dir = f'{output_root}/{basename(video_path)}/frame_{str(i).zfill(8)}/'
-            mkdir(output_dir)
+            mkdirs(output_dir)
             mydemo_batch.save_masked_image(frames[i], results[i], score_thr=0.3, output_dir=output_dir)
 
 
