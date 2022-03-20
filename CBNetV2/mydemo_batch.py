@@ -16,8 +16,7 @@ checkpoints = [
     f'{CBNetV2_HOME}checkpoints/htc_cbv2_swin_large22k_patch4_window7_mstrain_400-1400_giou_4conv1f_adamw_1x_coco.pth'
 ]
 
-
-
+COCO_classes = {0: 'person', 73: 'book'}
 
 def inference(images, config_file, checkpoint_file, score_thr=0.3):
     # init a detector
@@ -55,5 +54,5 @@ def save_masked_image(image, result, score_thr=0.3, output_dir='../data/outputs/
             if 0 in dst.shape:
                 continue
             
-            dst_path = f'{output_dir}/class{str(class_index).zfill(2)}_{str(instance_index).zfill(3)}.jpg'
+            dst_path = f'{output_dir}/{COCO_classes[class_index]}_{str(instance_index).zfill(3)}.jpg'
             Image.fromarray(dst.astype(np.uint8)).save(dst_path)
