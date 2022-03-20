@@ -33,7 +33,7 @@ def main():
     step_size = 4
     for slice_start in range(0, len(all_frames), step_size):
         frames = all_frames[slice_start : slice_start + step_size]
-        results = mydemo_batch.inference(frames)
+        results = mydemo_batch.inference(frames, model)
         for i in range(len(frames)):
             output_dir = f'{output_root}/{basename(video_path)}/frame_{str(i + slice_start).zfill(8)}/'
             makedirs(output_dir)
