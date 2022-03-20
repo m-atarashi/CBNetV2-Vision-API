@@ -19,9 +19,13 @@ checkpoints = [
 COCO_classes = {0: 'person', 73: 'book'}
 
 
-def inference(images, config_file=configs[1], checkpoint_file=checkpoints[1], score_thr=0.3):
+def load_model(config_file=configs[1], checkpoint_file=checkpoints[1], device=device):
     # init a detector
     model = init_detector(config_file, checkpoint_file, device=device)
+    return model
+
+
+def inference(images, model, score_thr=0.3):
     # inference images batch
     results = inference_detector(model, images)
     return results

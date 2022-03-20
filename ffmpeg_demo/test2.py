@@ -28,12 +28,14 @@ def extract_frames(video_path):
 
 def main():
     all_frames = extract_frames(video_path)
-    step_size = 2
+    model = mydemo_batch.load_model()
+
+    step_size = 4
     for slice_start in range(0, len(all_frames), step_size):
-        frames = all_frames[slice_start : min(slice_start + step_size, len(all_frames))]
+        frames = all_frames[slice_start : slice_start + step_size]
         results = mydemo_batch.inference(frames)
         for i in range(len(frames)):
-            output_dir = f'{output_root}/{basename(video_path)}/frame_{str(slice_start+i).zfill(8)}/'
+            output_dir = f'{output_root}/{basename(video_path)}/frame_{str(i + slice_start).zfill(8)}/'
             makedirs(output_dir)
             mydemo_batch.save_masked_image(frames[i], results[i], score_thr=0.3, output_dir=output_dir)
 
