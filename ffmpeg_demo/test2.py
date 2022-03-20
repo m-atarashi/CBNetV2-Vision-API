@@ -22,6 +22,7 @@ def extract_frames(video_path):
     )
 
     frames = np.frombuffer(output, np.uint8).reshape([-1, height_px, width_px, 3])
+    frames = [frame for frame in frames]
     return frames
 
 
