@@ -35,9 +35,11 @@ def main():
     for slice_start in range(0, len(all_frames), step_size):
         frames = all_frames[slice_start : slice_start + step_size]
         results = mydemo_batch.inference(frames, model)
-        for i in range(len(frames)):
+
+        for i in range(len(results)):
             output_dir = f'{output_root}/{basename(video_path)}/frame_{str(i + slice_start).zfill(8)}/'
             makedirs(output_dir)
+            
             mydemo_batch.save_masked_image(frames[i], results[i], score_thr=0.3, output_dir=output_dir)
 
 
