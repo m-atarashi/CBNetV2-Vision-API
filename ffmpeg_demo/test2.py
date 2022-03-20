@@ -55,9 +55,9 @@ def main_alter():
     step = inference_batch_size
     for slice_start in range(0, len(all_frames), step):
         batch_frames = all_frames[slice_start : slice_start + step]
-        
+
         batch_bboxes, batch_masks = mydemo_batch_alter.inference(batch_frames, model)
-        batch_masks = np.array(batch_masks, dtype=np.uint8))
+        batch_masks = np.array(batch_masks, dtype=np.uint8)
         batch_masks = batch_masks.reshape(*batch_masks.shape, 1)
         batch_coords = batch_bboxes.astype(np.uint16)[:][:4]
         batch_scores = batch_bboxes[:][4]
