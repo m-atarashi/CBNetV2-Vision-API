@@ -1,8 +1,8 @@
 import ffmpeg
 import numpy as np
 
-input_filename = '../demo_data/inputs/shelving_short.mp4'
-output_filename = '../demo_data/outputs/a.mp4'
+input_filename = '../data/inputs/shelving_short.mp4'
+output_filename = '../data/outputs/a.mp4'
 
 height = ffmpeg.probe(input_filename)['streams'][0]['height']
 width = ffmpeg.probe(input_filename)['streams'][0]['width']
