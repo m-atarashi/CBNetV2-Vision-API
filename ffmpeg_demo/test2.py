@@ -27,12 +27,15 @@ def extract_frames(video_path):
 
 
 def main():
-    frames = extract_frames(video_path)
-    results = mydemo_batch.inference(frames)
-    for i in len(frames):
-        output_dir = f'{output_root}/{path.basename(video_path)}/frame_{str(i).zfill(8)}/'
-        mkdir(output_dir)
-        mydemo_batch.save_masked_image(frames[i], results[i], score_thr=0.3, output_dir=output_dir)
+    all_frames = extract_frames(video_path)
+    step_size = 100
+    for slice_start in range(0, len(all_frames), step_size):
+        frames = [slice_start : min(slice_start + step_size, len(all_frames))]
+        results = mydemo_batch.inference(frames)
+        for i in len(frames):
+            output_dir = f'{output_root}/{path.basename(video_path)}/frame_{str(i).zfill(8)}/'
+            mkdir(output_dir)
+            mydemo_batch.save_masked_image(frames[i], results[i], score_thr=0.3, output_dir=output_dir)
 
 
 if __name__ == '__main__':
