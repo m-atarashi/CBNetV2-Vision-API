@@ -2,6 +2,7 @@ from os import makedirs
 from os.path import basename, splitext
 
 import ffmpeg
+import time
 import numpy as np
 from PIL import Image
 from numba import jit
@@ -49,4 +50,7 @@ def main():
 
 
 if __name__ == '__main__':
+    t_s = time.time()
     main()
+    t_e = time.time()
+    print(f'Processing time: {float(t_s - t_e)}[s]')
