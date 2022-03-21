@@ -35,7 +35,7 @@ def extract_instances(frames, base_output_dir):
         result = mydemo.inference(frame, model)
 
         output_dir = f'{base_output_dir}/frame_{str(i).zfill(8)}'
-        makedirs(output_dir, exist_ok = True)
+        makedirs(output_dir, exist_ok=True)
         mydemo.save_instances(frame, result, score_thr=0.3, output_dir=output_dir)
 
 
