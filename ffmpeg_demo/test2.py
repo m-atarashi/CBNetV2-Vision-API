@@ -32,48 +32,51 @@ def extract_frames(video_path):
 
 
 def main():
-    all_frames = extract_frames(video_path)
+    frames = extract_frames(video_path)
     model = mydemo_batch.load_model()
 
     step = inference_batch_size
-    for slice_start in range(0, len(all_frames), step):
-        batch_frames = all_frames[slice_start : slice_start + step]
+    for slice_start in range(0, len(frames), step):
+        print(f'frames: {slice_start}~{slice_start+step-1}')
+        batch_frames = frames[slice_start : slice_start + step]
 
         results = mydemo_batch.inference(batch_frames, model)
         for i, result in enumerate(results):
             output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i + slice_start).zfill(8)}/'
             makedirs(output_dir, exist_ok = True)
 
-            mydemo_batch.save_masked_image(batch_frames[i], result, score_thr=0.3, output_dir=output_dir)
+            mydemo_batch.save_instances(batch_frames[i], result, score_thr=0.3, output_dir=output_dir)
 
 
-def main_alter():
-    all_frames = extract_frames(video_path)
-    model = mydemo_batch_alter.load_model()
+# 徒労
+# def main_alter():
+#     frames = extract_frames(video_path)
+#     model = mydemo_batch_alter.load_model()
 
-    step = inference_batch_size
-    for slice_start in range(0, len(all_frames), step):
-        batch_frames = all_frames[slice_start : slice_start + step]
+#     step = inference_batch_size
+#     for slice_start in range(0, len(frames), step):
+#         print(f'frames: {slice_start}~{slice_start+step-1}')
+#         batch_frames = frames[slice_start : slice_start + step]
 
-        batch_bboxes, batch_masks = mydemo_batch_alter.inference(batch_frames, model)
+#         batch_bboxes, batch_masks = mydemo_batch_alter.inference(batch_frames, model)
 
-        for i in range(step):
-            if (1 + i + slice_start > len(all_frames)):
-                return
+#         for i in range(step):
+#             if (1 + i + slice_start > len(frames)):
+#                 return
             
-            output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(1 + i + slice_start).zfill(8)}/'
-            makedirs(output_dir, exist_ok=True)
+#             output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(1 + i + slice_start).zfill(8)}/'
+#             makedirs(output_dir, exist_ok=True)
 
-            masks = np.array(batch_masks[i])
-            masks = masks.reshape(*masks.shape, 1).astype(np.uint8)
-            coords = batch_bboxes[i][:,:4].astype(np.uint16)
-            scores = batch_bboxes[i][:,4]
+#             masks = np.array(batch_masks[i])
+#             masks = masks.reshape(*masks.shape, 1).astype(np.uint8)
+#             coords = batch_bboxes[i][:,:4].astype(np.uint16)
+#             scores = batch_bboxes[i][:,4]
 
-            mydemo_batch_alter.save_instances(batch_frames[i], coords, scores, masks, score_thr=0.3, output_dir=output_dir)
+#             mydemo_batch_alter.save_instances(batch_frames[i], coords, scores, masks, score_thr=0.3, output_dir=output_dir)
 
 
 if __name__ == '__main__':
     t_s = time.time()
-    main_alter()
+    main()
     t_e = time.time()
     print(f'Processing time: {float(t_e-t_s)}[s]')
