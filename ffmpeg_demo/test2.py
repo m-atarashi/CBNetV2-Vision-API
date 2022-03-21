@@ -57,16 +57,17 @@ def main_alter():
         batch_frames = all_frames[slice_start : slice_start + step]
 
         batch_bboxes, batch_masks = mydemo_batch_alter.inference(batch_frames, model)
-        batch_masks = np.array(batch_masks, dtype=np.uint8)
-        batch_masks = batch_masks.reshape(*batch_masks.shape, 1)
-        batch_coords = batch_bboxes.astype(np.uint16)[:][:4]
-        batch_scores = batch_bboxes[:][4]
 
         for i in range(step):
-            output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i + slice_start).zfill(8)}/'
+            output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(1 + i + slice_start).zfill(8)}/'
             makedirs(output_dir, exist_ok=True)
 
-            mydemo_batch_alter.save_instances(batch_frames[i], batch_coords[i], batch_scores[i], batch_masks[i], output_dir=output_dir)
+            masks = np.array(batch_masks[i])
+            masks = masks.reshape(*masks.shape, 1).astype(np.uint8)
+            coords = batch_bboxes[i][:,:4].astype(np.uint16)
+            scores = batch_bboxes[i][:,4]
+
+            mydemo_batch_alter.save_instances(batch_frames[i], coords, scores, masks, score_thr=0.3, output_dir=output_dir)
 
 
 if __name__ == '__main__':

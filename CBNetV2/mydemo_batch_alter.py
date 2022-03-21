@@ -34,14 +34,14 @@ def inference(images, model):
     return results[:, 0, sepc_class_index], results[:, 1, sepc_class_index]
 
 
-def save_instances(image, coords, score, masks, score_thr=0.3, output_dir=f'{CBNetV2_HOME}../outputs/'):
+def save_instances(image, coords, scores, masks, score_thr=0.3, output_dir=f'{CBNetV2_HOME}../outputs/'):
     num_instances = len(coords)
     for i in range(num_instances):
         # threshold check. coords[i][4] is the probabilty score
-        if coords[i][4] <= score_thr:
+        if scores[i] <= score_thr:
             continue
             
-        masked_instance  = image * mask[i]
+        masked_instance  = image * masks[i]
         cropped_instance = masked_instance[coords[i][1]:coords[i][3], coords[i][0]:coords[i][2]]
 
         # error handing for "ValueError: tile cannot extend outside image"
