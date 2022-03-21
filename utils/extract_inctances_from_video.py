@@ -14,8 +14,8 @@ output_root = '../data/outputs'
 
 
 def extract_frames(video_path):
-    height_px = ffmpeg.probe(video_path)['streams'][0]['height']
-    width_px  = ffmpeg.probe(video_path)['streams'][0]['width']
+    height = ffmpeg.probe(video_path)['streams'][0]['height']
+    width  = ffmpeg.probe(video_path)['streams'][0]['width']
 
     output, _ = (
         ffmpeg
@@ -24,7 +24,7 @@ def extract_frames(video_path):
         .run(capture_stdout=True)
     )
 
-    frames = np.frombuffer(output, np.uint8).reshape([-1, height_px, width_px, 3])
+    frames = np.frombuffer(output, np.uint8).reshape([-1, height, width, 3])
     return [frame for frame in frames]
 
 
