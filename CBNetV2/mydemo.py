@@ -31,7 +31,7 @@ def inference(image, model):
     return result
 
 
-def save_instances(image, result, score_thr=0.3, output_dir='../data/outputs/dst/'):
+def save_instances(image, result, score_thr=0.3, output_dir='../data/outputs/dst'):
     # class 0: person, class 73: book
     for class_index in [73]:
         # null check, result[1] is segmentation data
