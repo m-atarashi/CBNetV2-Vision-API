@@ -28,17 +28,21 @@ def extract_frames(video_path):
     return [frame for frame in frames]
 
 
-def main():
-    frames = extract_frames(video_path)
+def extract_instances(frames):
     model = mydemo.load_model()
 
     for i, frame in enumerate(frames):
         print(f'frame: {i+1}')
         result = mydemo.inference(frame, model)
 
-        output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i + slice_start).zfill(8)}/'
+        output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i).zfill(8)}/'
         makedirs(output_dir, exist_ok = True)
         mydemo.save_instances(frame, result, score_thr=0.3, output_dir=output_dir)
+
+
+def main():
+    frames = extract_frames(video_path)
+    extract_instances(frames)
 
 
 if __name__ == '__main__':
