@@ -5,7 +5,6 @@ import ffmpeg
 import time
 import numpy as np
 from PIL import Image
-from numba import jit
 
 from CBNetV2 import mydemo
 
@@ -35,7 +34,6 @@ def main():
 
     for i, frame in enumerate(frames):
         print(f'frame: {i+1}')
-
         result = mydemo.inference(frame, model)
 
         output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i + slice_start).zfill(8)}/'
