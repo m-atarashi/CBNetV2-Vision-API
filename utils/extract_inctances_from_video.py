@@ -8,8 +8,8 @@ from PIL import Image
 
 from CBNetV2 import mydemo
 
-
-OUTPUT_ROOT = '../data/outputs'
+CBNETV2_HOME = '/home/m-atarashi/CBNetV2'
+OUTPUT_ROOT = f'{CBNETV2_HOME}/data/outputs'
 
 
 def extract_frames(video_path):
@@ -24,7 +24,7 @@ def extract_frames(video_path):
     )
 
     frames = np.frombuffer(output, np.uint8).reshape([-1, height, width, 3])
-    return [frame for frame in frames]
+    return frames
 
 
 def extract_instances(frames, base_output_dir):
@@ -40,10 +40,11 @@ def extract_instances(frames, base_output_dir):
 
 
 def main():
-    video_path = '../data/inputs/shelving_short_02.mp4'
+    video_path = f'{CBNETV2_HOME}/data/inputs/shelving_short_02.mp4'
     frames = extract_frames(video_path)
-    base_output_dir = f'{OUTPUT_ROOT}/{splitext(basename(video_path))[0]}'
-    extract_instances(frames, base_output_dir)
+
+    base_output_dir = f'{OUTPUT_ROOT}/{splitext(basename(video_path))[0]}_test'
+    extract_instances(frames[:30], base_output_dir)
 
 
 if __name__ == '__main__':
