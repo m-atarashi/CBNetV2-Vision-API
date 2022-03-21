@@ -59,6 +59,9 @@ def main_alter():
         batch_bboxes, batch_masks = mydemo_batch_alter.inference(batch_frames, model)
 
         for i in range(step):
+            if (1 + i + slice_start > len(all_frames)):
+                return
+            
             output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(1 + i + slice_start).zfill(8)}/'
             makedirs(output_dir, exist_ok=True)
 
