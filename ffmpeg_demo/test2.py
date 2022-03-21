@@ -11,7 +11,6 @@ from CBNetV2 import mydemo, mydemo_batch, mydemo_batch_alter
 
 
 video_path = '../data/inputs/shelving_short_02.mp4'
-video_basename = splitext(basename(video_path))[0]
 output_root = '../data/outputs'
 # batch_size over 2 causes CUDA out of memory lol
 inference_batch_size = 2
