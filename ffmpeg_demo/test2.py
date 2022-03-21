@@ -36,7 +36,7 @@ def main():
         print(f'frame: {i+1}')
         result = mydemo.inference(frame, model)
 
-        output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i + slice_start).zfill(8)}/'
+        output_dir = f'{output_root}/{splitext(basename(video_path))[0]}/frame_{str(i).zfill(8)}/'
         makedirs(output_dir, exist_ok = True)
         mydemo.save_instances(frame, result, score_thr=0.3, output_dir=output_dir)
 
