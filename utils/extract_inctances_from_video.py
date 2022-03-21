@@ -44,7 +44,7 @@ def main():
     frames = extract_frames(video_path)
 
     base_output_dir = f'{OUTPUT_ROOT}/{splitext(basename(video_path))[0]}_test'
-    extract_instances(frames[:30], base_output_dir)
+    extract_instances(frames, base_output_dir)
 
 
 if __name__ == '__main__':
